@@ -1,0 +1,80 @@
+name: Build and Release LaTeX document
+
+on:
+  push:
+    branches: [ master ]
+    tags:
+    - 'v*'
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build_release_latex:
+    runs-on: ubuntu-22.04
+    env:
+      MAINFILE: thesis
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build drawio
+        uses: rlespinasse/drawio-export-action@v2.8.0
+        with:
+          action-mode: all
+          remove-page-suffix: true
+          path: drawio
+          output: .
+          format: pdf
+          crop: true
+
+      - name: Build matplotlib
+        run: |
+          cd python && pip3 install -r requirements.txt && cd ..
+          cd python && bash run.sh && cd ..
+
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: ${{env.MAINFILE}}.tex
+          latexmk_use_xelatex: true
+          latexmk_shell_escape: true
+          args: "-synctex=1 -interaction=nonstopmode -file-line-error"
+          
+      - name: Stash PDF
+        run: |
+          mv ${{env.MAINFILE}}.pdf $HOME # cache the file
+          
+      - name: Create Branch
+        uses: peterjgrainger/action-create-branch@v2.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          branch: gh_actions_builds
+          
+      - name: Checkout gh_actions_builds Branch
+        uses: actions/checkout@v1
+        with:
+          ref: gh_actions_builds
+          
+      - name: Commit PDF
+        run: |
+          git config --local user.email "github@spcsky.com"
+          git config --local user.name "Qi Hu"
+          mv $HOME/${{env.MAINFILE}}.pdf $(pwd) # bring it back 
+          git add -f ${{env.MAINFILE}}.pdf
+          git commit -m "Updated by GitHub Action Automatically"
+          
+      - name: Push PDF
+        uses: ad-m/github-push-action@v0.8.0
+        with: 
+          branch: gh_actions_builds 
+          force: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+  
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{env.MAINFILE}}.pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
