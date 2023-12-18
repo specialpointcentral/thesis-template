@@ -26,6 +26,45 @@ If you have struggled with any of these situations:
   - Note: This branch to be available after completing by `GitHub Action`.
 - Each commit triggers a compilation that generates the latest files (the pdf of thesis).
 
+## How to build locally
+
+There are two ways to build locally (in linux, macos, or wsl in windows):
+
+- Use `latexmk` to build locally.
+  - `latexmk -xelatex -outdir=build main.tex`
+- Use `make` to build locally (**Recommend**).
+  - `make`
+
+We recommend using `make` to build locally, because it can be used to deal the dependencies between files,
+generate the figures, and clean up the intermediate files.
+
+The `makefile` include the rules for folder `python`:
+
+- `make python`: Run the python script in the folder `python`.
+
+When you have some python scripts to run, you can put them in the folder `python` and run `make python`.
+Usually, the folder `python` contains the scripts for data processing and data visualization (matplotlib).
+More details can be found in the section [python](#python).
+
+Also you can use other commands to clean up the intermediate files:
+
+- `make clean`: Clean up the intermediate files generated during the compilation process.
+- `make distclean`: Clean up the intermediate files and the generated pdf.
+
+## Folder structure
+
+### `body`
+
+### `style`
+
+### `images`
+
+### `drawio`
+
+### `python`
+
+### others
+
 ## Emmm...
 
 Let's write here first, I'll add more later..
