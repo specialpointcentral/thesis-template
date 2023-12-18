@@ -19,7 +19,7 @@ def main(argv):
   import matplotlib.pyplot as plt
   # ...
   plt.plot([1,2,3,4])
-  print(script_path)
+  # ...
 
   if not quiet:
     print('Show plot...')
