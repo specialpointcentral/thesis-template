@@ -29,7 +29,7 @@ jobs:
 
       - name: Build matplotlib
         run: |
-          cd python && pip3 install -r requirements.txt && cd ..
+          sudo apt-get update && sudo apt-get install -y python3-venv
           cd python && bash run.sh && cd ..
 
       - name: Compile LaTeX document

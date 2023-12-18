@@ -54,6 +54,10 @@ make/bib: $(BIB)
 	$(DRAWIO) $(DRAWIO_FLAGS) $< -o $@
 	cp $@ $(addsuffix .pdf, $(basename $<))
 
+.PHONY: python
+python:
+	@cd python && bash run.sh
+
 .PHONY: clean
 clean:
 	-rm -f *.aux body/*.aux
@@ -71,4 +75,4 @@ distclean: clean
 	-rm -f *.dvi
 	-rm -f *.synctex.gz
 	-rm -f drawio/*.drawpic drawio/*.pdf
-	-rm 
+	-rm -f make

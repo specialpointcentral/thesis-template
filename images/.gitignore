@@ -1,3 +1,4 @@
 *.pdf
 
-!images/ucas_logo.pdf
+# You can use !xxx.pdf to remain pdf files in the list
+# which you want to commit them
