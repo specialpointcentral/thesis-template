@@ -75,4 +75,4 @@ distclean: clean
 	-rm -f *.dvi
 	-rm -f *.synctex.gz
 	-rm -f drawio/*.drawpic drawio/*.pdf
-	-rm -f make
+	-rm -fr make
