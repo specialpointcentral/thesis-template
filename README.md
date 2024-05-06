@@ -31,7 +31,7 @@ If you have struggled with any of these situations:
 There are two ways to build locally (in linux, macos, or wsl in windows):
 
 - Use `latexmk` to build locally.
-  - `latexmk -xelatex -outdir=build main.tex`
+  - `latexmk -xelatex -outdir=build thesis.tex`
 - Use `make` to build locally (**Recommend**).
   - `make`
 
