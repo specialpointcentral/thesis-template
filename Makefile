@@ -27,9 +27,21 @@ DRAWIO  ?= drawio
 LATEX_FLAGS = -synctex=1 -shell-escape -interaction=nonstopmode -file-line-error
 DRAWIO_FLAGS = -f pdf -x --crop
 
+# Detect OS for opening pdf
+ifeq ($(OS),Windows_NT)
+    # Windows
+    OPEN_PDF := start
+else ifeq ($(shell uname),Darwin)
+    # macOS
+    OPEN_PDF := open
+else
+    # Linux
+    OPEN_PDF := /bin/bash -c xdg-open
+endif
+
 .PHONY: all
 all: $(MAINFILE).dvi $(MAINFILE).pdf
-	/bin/bash xdg-open $(MAINFILE).pdf
+	$(OPEN_PDF) $(MAINFILE).pdf
 
 $(MAINFILE).dvi: $(DRAWS_FILES) $(TESTS) $(EXTRA_FILES)
 	$(LATEX) $(LATEX_FLAGS) $(MAINFILE)
